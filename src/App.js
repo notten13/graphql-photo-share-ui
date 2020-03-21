@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter } from 'react-router-dom';
+import Users from './Users';
+import { gql } from 'apollo-boost';
+import AuthorisedUser from './AuthorisedUser';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+export const ROOT_QUERY = gql`
+  query allUsers {
+    totalUsers,
+    allUsers { ...userInfo },
+    me { ...userInfo }
+  }
+
+  fragment userInfo on User {
+    githubLogin,
+    name,
+    avatar,
+  }
+`;
+
+const App = () => (
+  <BrowserRouter>
+    <div>
+      <AuthorisedUser />
+      <Users />
     </div>
-  );
-}
+  </BrowserRouter>
+);
 
 export default App;
